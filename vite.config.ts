@@ -3,9 +3,9 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   plugins: [react()],
-  // Use root base for custom domain (plume.defne.dev), or '/plume/' for
-  // defnalk.github.io/plume. Set via env var so the deploy script can toggle.
-  base: process.env.VITE_BASE ?? "/",
+  // '/plume/' for GitHub Pages (defnalk.github.io/plume), or '/' for a
+  // custom domain. Set VITE_BASE=/ when deploying to plume.defne.dev.
+  base: process.env.VITE_BASE ?? "/plume/",
   build: {
     target: "es2022",
     sourcemap: false,
