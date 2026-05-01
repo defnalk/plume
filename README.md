@@ -10,7 +10,7 @@ encodes species composition along the column.
 
 Live: **[plume.defne.dev](https://plume.defne.dev)**
 
-![Plume preview](./docs/plume.gif)
+![Plume preview](./docs/preview.png)
 
 ## What's interesting
 

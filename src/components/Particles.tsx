@@ -57,7 +57,7 @@ export function Particles({
       uBottomY: { value: bottomY },
       uTSpeed: { value: flowSpeed },
       uReducedMotion: { value: reducedMotion ? 1 : 0 },
-      uPointSize: { value: 14 },
+      uPointSize: { value: 8 },
       uPixelRatio: { value: pixelRatio },
       uColumnHalfWidth: { value: columnHalfWidth },
       uLut: { value: lut },
@@ -87,7 +87,7 @@ export function Particles({
         fragmentShader={particlesFragment}
         transparent
         depthWrite={false}
-        blending={THREE.AdditiveBlending}
+        blending={THREE.NormalBlending}
       />
     </points>
   );

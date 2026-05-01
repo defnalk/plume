@@ -64,10 +64,10 @@ void main() {
 
   // Distort the mask with noise to break up the column shape
   float warped = n * mask;
-  float core = pow(warped, 2.2) * uIntensity;
+  float core = pow(warped, 2.4) * uIntensity;
 
   vec3 col = mix(uColorCool, uColorHot, smoothstep(0.0, 0.6, n));
-  float alpha = clamp(core * 1.4, 0.0, 0.85);
+  float alpha = clamp(core * 0.55, 0.0, 0.45);
 
   gl_FragColor = vec4(col, alpha);
 }

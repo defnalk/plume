@@ -51,7 +51,11 @@ void main() {
   float edgeFade = smoothstep(0.0, 0.05, u) * (1.0 - smoothstep(0.95, 1.0, u));
   vAlpha = edgeFade;
 
-  gl_PointSize = uPointSize * uPixelRatio * (300.0 / max(-mv.z, 1.0));
+  // Mild perspective scaling so closer particles read slightly larger,
+  // but keep an absolute ceiling — otherwise a 200px monster particle
+  // smears across the entire column.
+  float depthScale = clamp(40.0 / max(-mv.z, 1.0), 0.6, 1.6);
+  gl_PointSize = uPointSize * uPixelRatio * depthScale;
 }
 `;
 
@@ -65,9 +69,14 @@ void main() {
   vec2 c = gl_PointCoord - vec2(0.5);
   float d = length(c);
   if (d > 0.5) discard;
-  float alpha = smoothstep(0.5, 0.0, d) * vAlpha;
-  // Boost luminosity at center for a hot-particle look
-  vec3 col = vColor + vec3(0.4) * pow(1.0 - d * 2.0, 4.0);
+  // Soft falloff with a tiny core highlight. Kept conservative because we
+  // additive-blend ~hundreds of these — too much per-particle alpha and the
+  // column saturates to white.
+  // Soft circular falloff with a small bright pip. Modest alpha so a
+  // dense field reads as a colored mist rather than saturating to white.
+  float falloff = pow(1.0 - d * 2.0, 1.6);
+  float alpha = falloff * 0.45 * vAlpha;
+  vec3 col = vColor * (1.0 + 0.4 * pow(falloff, 3.0));
   gl_FragColor = vec4(col, alpha);
 }
 `;

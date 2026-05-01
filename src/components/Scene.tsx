@@ -10,7 +10,7 @@ import { Reactor } from "./Reactor";
 const TOP_Y = 4.5;
 const BOTTOM_Y = -4.5;
 const COLUMN_HALF_WIDTH = 0.85;
-const PARTICLE_COUNT = 700;
+const PARTICLE_COUNT = 600;
 
 export interface SceneHandle {
   takeScreenshot: () => string | null;
@@ -57,11 +57,17 @@ export const Scene = forwardRef<SceneHandle, SceneProps>(function Scene(
         sceneRef.current = state.scene;
         cameraRef.current = state.camera as THREE.PerspectiveCamera;
         state.gl.setClearColor(new THREE.Color("#08080d"), 1);
+        // ACES tonemapping compresses additive blending output into a
+        // perceptual range. Without it, hundreds of overlapping particles
+        // saturate the column to pure white.
+        state.gl.toneMapping = THREE.ACESFilmicToneMapping;
+        state.gl.toneMappingExposure = 0.95;
+        state.gl.outputColorSpace = THREE.SRGBColorSpace;
       }}
     >
-      <ambientLight intensity={0.45} />
-      <directionalLight position={[6, 8, 5]} intensity={0.9} color="#fef3c7" />
-      <directionalLight position={[-4, -2, 3]} intensity={0.35} color="#7dd3fc" />
+      <ambientLight intensity={0.35} />
+      <directionalLight position={[6, 8, 5]} intensity={0.55} color="#fef3c7" />
+      <directionalLight position={[-4, -2, 3]} intensity={0.25} color="#7dd3fc" />
 
       <Reactor topY={TOP_Y} bottomY={BOTTOM_Y} columnHalfWidth={COLUMN_HALF_WIDTH} />
 
